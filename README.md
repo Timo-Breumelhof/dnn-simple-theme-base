@@ -1,4 +1,10 @@
-# dnn-simple-theme-base (work in progress)
+Perfect! Here’s the **final, fully updated README** ready for GitHub — beginner-friendly, includes multiple DNN targets, the correct `Portals/Default` path, and Skin.css + Skin.min.css instructions.
+
+You can replace your current `README.md` with this.
+
+---
+
+# dnn-simple-theme-base
 
 A simple starting point for building a **DNN theme outside of DNN**.
 
@@ -39,16 +45,18 @@ This allows you to develop and update your theme without working directly inside
 ## Description
 
 * Values written as `[token]` are read from the configuration file
-* `[targetPaths]` can contain one or more target locations
+* `[targetPaths]` can contain **one or more target locations**
+* The build process outputs **both normal and minified CSS** for skins
 
 ### Build Output
 
-* **Skin files:**
-  `[targetPaths]/Skins/[themeName]`
-* **Container files:**
-  `[targetPaths]/Containers/[themeName]`
-* **CSS file:**
-  `[targetPaths]/Skins/[themeName]/Skin.css`
+For each `targetPath`:
+
+* **Skin files:** `[targetPaths]/Skins/[themeName]`
+
+  * `Skin.css` (compiled from SCSS)
+  * `Skin.min.css` (minified version)
+* **Container files:** `[targetPaths]/Containers/[themeName]`
 
 ---
 
@@ -57,21 +65,57 @@ This allows you to develop and update your theme without working directly inside
 * **Skin and Container folders**
   When a file is changed or added, all files in the target location are removed and replaced with the updated files.
 * **`src/scss` folder**
-  SCSS files are compiled into the CSS output file.
+  SCSS files are compiled into `Skin.css` and `Skin.min.css`.
 
 ---
 
-## How to Use
+## Quick Start (Beginner Friendly)
 
-1. Copy `config.json` to `config-local.json`
-2. Update the values in `config-local.json`
+A. Download the source zip from GitHub.
+B. Unzip the folder **outside of any DNN installation**.
+C. Copy `config.json` to `config-local.json`
 
-   * Set the theme name
-   * Add or update `targetPaths`
-3. Run the build or watch task
-4. Place your **Skin** files in the `skin` folder (`.ascx` / `.cshtml`)
-5. Place your **Container** files in the `container` folder (`.ascx` / `.cshtml`)
-6. Place your **SCSS** files in the `src/scss` folder
+* **Update paths and theme name for your local setup.**
+* `targetPaths` can contain **one or more DNN installation skin paths**.
+
+  * Each path should point to the DNN portal’s folder where skins and containers reside:
+
+    ```
+    [DNN Site Root]/Portals/Default
+    ```
+  * This allows the build process to copy the generated files to **multiple DNN installations at once**.
+  * Example:
+
+    ```json
+    {
+      "themeName": "MyTheme",
+      "targetPaths": [
+        "C:/DNN/Website1/Portals/Default",
+        "C:/DNN/Website2/Portals/Default"
+      ]
+    }
+    ```
+
+D. Install dependencies:
+
+```bash
+npm install
+```
+
+E. Build the theme once:
+
+```bash
+gulp
+```
+
+F. Start watching for changes (optional, recommended for development):
+
+```bash
+gulp watch
+```
+
+G. The compiled files (`Skin.css` and `Skin.min.css`) are now in `[targetPaths]/Skins/[themeName]`.
+Copy the **entire theme folder** (Skins + Containers) into your DNN installation when ready.
 
 ---
 
@@ -107,8 +151,29 @@ Once you start building your **own theme** from this base:
 
 ---
 
-If you want next steps, I can:
+## Folder Structure Example
 
-* Add a **Quick Start (3–5 steps)**
-* Include an **example folder structure**
-* Or simplify this even further for absolute beginners
+```
+dnn-simple-theme-base/
+│
+├─ skin/                # Your Skin files (.ascx, .cshtml)
+├─ container/           # Your Container files (.ascx, .cshtml)
+├─ src/
+│   └─ scss/            # Your SCSS files
+├─ config.json          # Template config
+├─ config-local.json    # Local config (not in GitHub)
+├─ gulpfile.js          # Build and watch tasks
+└─ README.md
+```
+
+This diagram shows **where to place your files** for the build process to work correctly.
+
+---
+
+## Notes
+
+* The build process generates **both `Skin.css` and `Skin.min.css`** automatically.
+* You can copy the **entire theme folder** to **one or multiple DNN installations** depending on your `targetPaths`.
+* Recommended workflow for beginners:
+
+  * Edit SCSS → run `gulp` → copy generated files to DNN

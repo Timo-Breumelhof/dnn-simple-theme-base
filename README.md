@@ -1,9 +1,3 @@
-Perfect! Here’s the **final, fully updated README** ready for GitHub — beginner-friendly, includes multiple DNN targets, the correct `Portals/Default` path, and Skin.css + Skin.min.css instructions.
-
-You can replace your current `README.md` with this.
-
----
-
 # dnn-simple-theme-base
 
 A simple starting point for building a **DNN theme outside of DNN**.

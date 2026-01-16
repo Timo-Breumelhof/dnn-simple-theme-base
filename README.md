@@ -98,19 +98,19 @@ C. Copy `config.json` to `config-local.json`
 
 D. Install dependencies:
 
-```bash
+```bash / CMD
 npm install
 ```
 
 E. Build the theme once:
 
-```bash
+```bash / CMD
 gulp
 ```
 
 F. Start watching for changes (optional, recommended for development):
 
-```bash
+```bash / CMD
 gulp watch
 ```
 

@@ -22,6 +22,7 @@ This allows you to develop and update your theme without working directly inside
 
 ---
 
+
 ## Technology Used
 
 * Node.js
@@ -65,9 +66,10 @@ For each `targetPath`:
 
 ## Quick Start (Beginner Friendly)
 
-A. Download the source zip from GitHub.
-B. Unzip the folder **outside of any DNN installation**.
-C. Copy `config.json` to `config-local.json`
+A. Make sure you have [Node.js and npm installed](nodejs.md) before running this project.
+B. Download the source zip from GitHub.
+C. Unzip the folder **outside of any DNN installation**.
+D. Copy `config.json` to `config-local.json`
 
 * **Update paths and theme name for your local setup.**
 * `targetPaths` can contain **one or more DNN installation skin paths**.
@@ -90,25 +92,25 @@ C. Copy `config.json` to `config-local.json`
     }
     ```
 
-D. Install dependencies:
+E. Install dependencies:
 
 ```bash / CMD
 npm install
 ```
 
-E. Build the theme once:
+F. Build the theme once:
 
 ```bash / CMD
 gulp
 ```
 
-F. Start watching for changes (optional, recommended for development):
+G. Start watching for changes (optional, recommended for development):
 
 ```bash / CMD
 gulp watch
 ```
 
-G. The compiled files (`Skin.css` and `Skin.min.css`) are now in `[targetPaths]/Skins/[themeName]`.
+H. The compiled files (`Skin.css` and `Skin.min.css`) are now in `[targetPaths]/Skins/[themeName]`.
 Copy the **entire theme folder** (Skins + Containers) into your DNN installation when ready.
 
 ---

@@ -5,7 +5,7 @@ node_modules/
 config-local.json
 
 # Build output (temporary)
-_buildtarget/
+_dist/
 _release/
 
 # OS files

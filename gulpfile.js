@@ -7,6 +7,7 @@ const cleanCSS = require('gulp-clean-css');
 const rename = require('gulp-rename');
 const header = require('gulp-header');
 
+
 /**
  * Load config (defensive)
  */
@@ -20,16 +21,13 @@ function loadJsonConfig(filePath, { required = false } = {}) {
     }
     return {};
   }
-
   const raw = fs.readFileSync(filePath, 'utf8').trim();
-
   if (!raw) {
     throw new Error(
       `\nERROR: ${filePath} exists but is empty.\n` +
       `Please provide valid JSON.\n`
     );
   }
-
   try {
     return JSON.parse(raw);
   } catch (err) {
@@ -42,14 +40,23 @@ function loadJsonConfig(filePath, { required = false } = {}) {
 
 const baseConfig = loadJsonConfig('./config.json', { required: true });
 const localConfig = loadJsonConfig('./config-local.json');
-
 const config = { ...baseConfig, ...localConfig };
+
 const themeName = config.themeName;
 const targetPaths = config.targetPaths || [];
+const distFolder = config.distFolder || '_dist';
 
 /**
  * Helpers
  */
+function distSkinPath() {
+  return path.join(distFolder, 'Skins', themeName);
+}
+
+function distContainerPath() {
+  return path.join(distFolder, 'Containers', themeName);
+}
+
 function skinTarget(basePath) {
   return path.join(basePath, 'Skins', themeName);
 }
@@ -61,6 +68,10 @@ function containerTarget(basePath) {
 /**
  * Clean tasks
  */
+function cleanDist() {
+  return del([`${distFolder}/**`], { force: true });
+}
+
 function cleanSkins() {
   const paths = targetPaths.map(p => skinTarget(p));
   return del(paths, { force: true });
@@ -72,59 +83,84 @@ function cleanContainers() {
 }
 
 /**
- * Copy tasks
+ * Build to dist folder
  */
-function copySkins() {
-  return targetPaths.reduce((stream, basePath) => {
-    return stream.pipe(dest(skinTarget(basePath)));
-  }, src('skin/**/*'));
+function buildSkinsToToDist() {
+  return src('skin/**/*')
+    .pipe(dest(distSkinPath()));
 }
 
-function copyContainers() {
-  return targetPaths.reduce((stream, basePath) => {
-    return stream.pipe(dest(containerTarget(basePath)));
-  }, src('container/**/*'));
+function buildContainersToDist() {
+  return src('container/**/*')
+    .pipe(dest(distContainerPath()));
+}
+
+function buildScss() {
+  const cssComment = config.cssComment || '';
+  return src('src/scss/**/*.scss')
+    .pipe(sass().on('error', sass.logError))
+    .pipe(cleanCSS())
+    .pipe(header(cssComment + '\n'))
+    .pipe(rename('skin.css'))
+    .pipe(dest(distSkinPath()));
 }
 
 /**
- * SCSS build and minification
+ * Distribute from dist to target paths
  */
-
-function buildScss() {
-  const cssComment = config.cssComment || ''; // fallback if not defined
-
+function distributeSkins() {
+  if (targetPaths.length === 0) {
+    console.log('No targetPaths configured, skipping distribution.');
+    return Promise.resolve();
+  }
+  
   return targetPaths.reduce((stream, basePath) => {
-    const destPath = skinTarget(basePath);
-
-    return stream
-      .pipe(sass().on('error', sass.logError)) // compile SCSS
-      .pipe(cleanCSS())                        // minify
-      .pipe(header(cssComment + '\n'))         // add comment on top
-      .pipe(rename('skin.css'))                // force output filename
-      .pipe(dest(destPath));                   // write file
-  }, src('src/scss/**/*.scss'));
+    return stream.pipe(dest(skinTarget(basePath)));
+  }, src(`${distFolder}/Skins/${themeName}/**/*`));
 }
 
+function distributeContainers() {
+  if (targetPaths.length === 0) {
+    console.log('No targetPaths configured, skipping distribution.');
+    return Promise.resolve();
+  }
+  
+  return targetPaths.reduce((stream, basePath) => {
+    return stream.pipe(dest(containerTarget(basePath)));
+  }, src(`${distFolder}/Containers/${themeName}/**/*`));
+}
 
 /**
  * Watch
  */
 function watchFiles() {
-  watch('skin/**/*', series(cleanSkins, copySkins));
-  watch('container/**/*', series(cleanContainers, copyContainers));
-  watch('src/scss/**/*.scss', buildScss);
+  watch('skin/**/*', series(buildSkinsToToDist, cleanSkins, distributeSkins));
+  watch('container/**/*', series(buildContainersToDist, cleanContainers, distributeContainers));
+  watch('src/scss/**/*.scss', series(buildScss, cleanSkins, distributeSkins));
 }
 
 /**
  * Public tasks
  */
+// Build everything to dist only
 exports.build = series(
-  cleanSkins,
-  cleanContainers,
-  copySkins,
-  copyContainers,
+  cleanDist,
+  buildSkinsToToDist,
+  buildContainersToDist,
   buildScss
 );
 
-exports.watch = watchFiles;
-exports.default = exports.build;
+// Build to dist AND distribute to target paths
+exports.distribute = series(
+  exports.build,
+  cleanSkins,
+  cleanContainers,
+  distributeSkins,
+  distributeContainers
+);
+
+// Watch and auto-distribute
+exports.watch = series(exports.distribute, watchFiles);
+
+// Default: build to dist and distribute
+exports.default = exports.distribute;

@@ -1,13 +1,14 @@
 {
-  "name": "timo-simple-base-theme",
+  "name": "simple-base-theme",
   "version": "0.0.1",
-  "description": "A dnna base theme",
+  "description": "A dnn based theme",
   "scripts": {
     "start": "gulp",
     "build": "gulp build"
   },
-  "devDependencies": {
-    "gulp": "^4.0.2",
+"devDependencies": {
+    "del": "^6.1.1",
+    "gulp": "^5.0.0",
     "gulp-clean-css": "^4.3.0",
     "gulp-concat": "^2.6.1",
     "gulp-header": "^2.0.9",
@@ -15,7 +16,7 @@
     "gulp-sass": "^5.1.0",
     "gulp-uglify": "^3.0.2",
     "sass": "^1.97.2"
-  },
+},
   "author": "Timo Breumelhof",
   "license": "LGPL-3.0-or-later"
 }

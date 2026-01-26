@@ -4,6 +4,6 @@
 <%@ Register TagPrefix="dnn" TagName="LOGIN" Src="~/Admin/Skins/Login.ascx" %>
 <%@ Register TagPrefix="dnn" TagName="MENU" src="~/DesktopModules/DDRMenu/Menu.ascx" %>
 
-<dnn:MENU MenuStyle="menu/razor=ul" runat="server"></dnn:MENU>
+<dnn:MENU MenuStyle="menu\razor-ul" runat="server" ExcludeNodes="Admin,Host"></dnn:MENU>
 
 <div class="ContentPane Pane" id="ContentPane" runat="server"></div>

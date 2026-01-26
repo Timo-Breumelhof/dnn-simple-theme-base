@@ -160,7 +160,8 @@ exports.distribute = series(
 );
 
 // Watch and auto-distribute
-exports.watch = series(exports.distribute, watchFiles);
+exports.watch = series(exports.build, exports.distribute, watchFiles);
+
 
 // Default: build to dist and distribute
 exports.default = exports.distribute;

@@ -72,8 +72,8 @@ B. Download the source zip from GitHub.
 
 C. Unzip the folder **outside of any DNN installation**.
 
-D. Copy `config.json` to `config-local.json`
-**Do not edit `config.json` directly** - this is the base template
+D. Copy `config.json` to `config-local.json` 
+**Do not edit `config.json` directly** - this is the base template 
 Instead, override any settings you need in `config-local.json`
 
 * Update paths, theme name, and JS file order for your local setup

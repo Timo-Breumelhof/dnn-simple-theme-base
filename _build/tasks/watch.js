@@ -13,7 +13,7 @@ const { distributeSkins, distributeContainers } = require('./distribute');
 function watchFiles() {
   watch('skin/**/*', series(buildSkinsToDist, cleanSkins, distributeSkins));
   watch('container/**/*', series(buildContainersToDist, cleanContainers, distributeContainers));
-  watch('src/scss/**/*.scss', series(buildScss, cleanSkins, distributeSkins));
+  watch(['src/scss/**/*.scss', '_base/scss/**/*.scss'], buildScss);
   watch('src/js/**/*.js', series(buildJs, cleanSkins, distributeSkins));
   watch('vendors/**/*', series(copyVendors, cleanSkins, distributeSkins));
 }

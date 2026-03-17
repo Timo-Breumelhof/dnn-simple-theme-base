@@ -88,12 +88,12 @@ function cleanContainers() {
  * Build to dist folder
  */
 function buildSkinsToDist() {
-  return src('skin/**/*')
+  return src('skin/**/*', { encoding: false })
     .pipe(dest(distSkinPath()));
 }
 
 function buildContainersToDist() {
-  return src('container/**/*')
+  return src('container/**/*', { encoding: false })
     .pipe(dest(distContainerPath()));
 }
 
@@ -131,7 +131,7 @@ function copyVendors() {
     return Promise.resolve();
   }
   
-  return src('vendors/**/*')
+  return src('vendors/**/*', { encoding: false })
     .pipe(dest(`${distSkinPath()}/vendors`));
 }
 
@@ -178,10 +178,10 @@ function distributeSkins() {
     console.log('No targetPaths configured, skipping distribution.');
     return Promise.resolve();
   }
-  
+
   return targetPaths.reduce((stream, basePath) => {
     return stream.pipe(dest(skinTarget(basePath)));
-  }, src(`${distFolder}/Skins/${themeName}/**/*`));
+  }, src(`${distFolder}/Skins/${themeName}/**/*`, { encoding: false }));
 }
 
 function distributeContainers() {
@@ -189,10 +189,10 @@ function distributeContainers() {
     console.log('No targetPaths configured, skipping distribution.');
     return Promise.resolve();
   }
-  
+
   return targetPaths.reduce((stream, basePath) => {
     return stream.pipe(dest(containerTarget(basePath)));
-  }, src(`${distFolder}/Containers/${themeName}/**/*`));
+  }, src(`${distFolder}/Containers/${themeName}/**/*`, { encoding: false }));
 }
 
 /**

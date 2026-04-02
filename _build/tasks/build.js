@@ -42,7 +42,7 @@ function buildScss() {
     return Promise.resolve();
   }
   const generatedFileWarning = config.generatedFileWarning || '';
-  return src('src/scss/**/*.scss')
+  return src('src/scss/skin.scss')
     .pipe(sass().on('error', sass.logError))
     .pipe(cleanCSS())
     .pipe(header(generatedFileWarning + '\n'))

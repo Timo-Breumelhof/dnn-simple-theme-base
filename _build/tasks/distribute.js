@@ -36,7 +36,40 @@ function distributeContainers() {
   }, src(`${distFolder}/Containers/${themeName}/**/*`, { encoding: false }));
 }
 
+/**
+ * Distribute only skin.css to target paths
+ */
+function distributeCss() {
+  if (targetPaths.length === 0) return Promise.resolve();
+  return targetPaths.reduce((stream, basePath) => {
+    return stream.pipe(dest(skinTarget(basePath)));
+  }, src(`${distFolder}/Skins/${themeName}/skin.css`, { encoding: false }));
+}
+
+/**
+ * Distribute only skin.js to target paths
+ */
+function distributeJs() {
+  if (targetPaths.length === 0) return Promise.resolve();
+  return targetPaths.reduce((stream, basePath) => {
+    return stream.pipe(dest(skinTarget(basePath)));
+  }, src(`${distFolder}/Skins/${themeName}/skin.js`, { encoding: false }));
+}
+
+/**
+ * Distribute only vendors folder to target paths
+ */
+function distributeVendors() {
+  if (targetPaths.length === 0) return Promise.resolve();
+  return targetPaths.reduce((stream, basePath) => {
+    return stream.pipe(dest(`${skinTarget(basePath)}/vendors`));
+  }, src(`${distFolder}/Skins/${themeName}/vendors/**/*`, { encoding: false }));
+}
+
 module.exports = {
   distributeSkins,
   distributeContainers,
+  distributeCss,
+  distributeJs,
+  distributeVendors,
 };

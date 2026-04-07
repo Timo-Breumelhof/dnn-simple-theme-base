@@ -7,7 +7,7 @@ const { series } = require('gulp');
 
 // Import task modules
 const { cleanDist, cleanSkins, cleanContainers } = require('./tasks/clean');
-const { buildSkinsToDist, buildContainersToDist, buildScss, buildJs, copyVendors } = require('./tasks/build');
+const { buildSkinsToDist, buildContainersToDist, buildScss, buildLess, buildJs, copyVendors } = require('./tasks/build');
 const { distributeSkins, distributeContainers } = require('./tasks/distribute');
 const { watchFiles } = require('./tasks/watch');
 const { getVendorsFromNpm } = require('./tasks/vendors');
@@ -25,6 +25,7 @@ exports.build = series(
   buildSkinsToDist,
   buildContainersToDist,
   buildScss,
+  buildLess,
   buildJs,
   copyVendors
 );
